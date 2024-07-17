@@ -9,48 +9,23 @@ import {
     MARK_UNDERLINE,
 } from '@udecode/plate-basic-marks';
 import {ELEMENT_BLOCKQUOTE} from '@udecode/plate-block-quote';
-import {
-    ELEMENT_CODE_BLOCK,
-    ELEMENT_CODE_LINE,
-    ELEMENT_CODE_SYNTAX,
-} from '@udecode/plate-code-block';
+import {ELEMENT_CODE_BLOCK, ELEMENT_CODE_LINE, ELEMENT_CODE_SYNTAX,} from '@udecode/plate-code-block';
 import {MARK_COMMENT} from '@udecode/plate-comments';
-import {
-    PlateElement,
-    PlateLeaf,
-    type PlatePluginComponent,
-} from '@udecode/plate-common';
+import {PlateElement, PlateLeaf, type PlatePluginComponent,} from '@udecode/plate-common';
 import {ELEMENT_EXCALIDRAW} from '@udecode/plate-excalidraw';
 import {MARK_SEARCH_HIGHLIGHT} from '@udecode/plate-find-replace';
-import {
-    ELEMENT_H1,
-    ELEMENT_H2,
-    ELEMENT_H3,
-    ELEMENT_H4,
-    ELEMENT_H5,
-    ELEMENT_H6,
-} from '@udecode/plate-heading';
+import {ELEMENT_H1, ELEMENT_H2, ELEMENT_H3, ELEMENT_H4, ELEMENT_H5, ELEMENT_H6,} from '@udecode/plate-heading';
 import {MARK_HIGHLIGHT} from '@udecode/plate-highlight';
 import {ELEMENT_HR} from '@udecode/plate-horizontal-rule';
 import {MARK_KBD} from '@udecode/plate-kbd';
 import {ELEMENT_COLUMN, ELEMENT_COLUMN_GROUP} from '@udecode/plate-layout';
 import {ELEMENT_LINK} from '@udecode/plate-link';
-import {
-    ELEMENT_LI,
-    ELEMENT_OL,
-    ELEMENT_TODO_LI,
-    ELEMENT_UL,
-} from '@udecode/plate-list';
+import {ELEMENT_LI, ELEMENT_OL, ELEMENT_TODO_LI, ELEMENT_UL,} from '@udecode/plate-list';
 import {ELEMENT_IMAGE, ELEMENT_MEDIA_EMBED} from '@udecode/plate-media';
 import {ELEMENT_MENTION, ELEMENT_MENTION_INPUT} from '@udecode/plate-mention';
 import {ELEMENT_PARAGRAPH} from '@udecode/plate-paragraph';
 import {ELEMENT_SLASH_INPUT} from '@udecode/plate-slash-command';
-import {
-    ELEMENT_TABLE,
-    ELEMENT_TD,
-    ELEMENT_TH,
-    ELEMENT_TR,
-} from '@udecode/plate-table';
+import {ELEMENT_TABLE, ELEMENT_TD, ELEMENT_TH, ELEMENT_TR,} from '@udecode/plate-table';
 import {ELEMENT_TOGGLE} from '@udecode/plate-toggle';
 
 import {BlockquoteElement} from '@/registry/default/plate-ui/blockquote-element';
@@ -77,17 +52,13 @@ import {ParagraphElement} from '@/registry/default/plate-ui/paragraph-element';
 import {withPlaceholders} from '@/registry/default/plate-ui/placeholder';
 import {SearchHighlightLeaf} from '@/registry/default/plate-ui/search-highlight-leaf';
 import {SlashInputElement} from '@/registry/default/plate-ui/slash-input-element';
-import {
-    TableCellElement,
-    TableCellHeaderElement,
-} from '@/registry/default/plate-ui/table-cell-element';
+import {TableCellElement, TableCellHeaderElement,} from '@/registry/default/plate-ui/table-cell-element';
 import {TableElement} from '@/registry/default/plate-ui/table-element';
 import {TableRowElement} from '@/registry/default/plate-ui/table-row-element';
 import {TodoListElement} from '@/registry/default/plate-ui/todo-list-element';
 import {ToggleElement} from '@/registry/default/plate-ui/toggle-element';
 import {withDraggables} from '@/registry/default/plate-ui/with-draggables';
 import {ELEMENT_EMOJI_INPUT} from "@udecode/plate-emoji";
-import {AmazingComponent, KEY_AMAZING} from "@/components/edtiro_compnents/amazing_com";
 
 // import { ELEMENT_EMOJI_INPUT } from '../../packages/emoji/dist';
 
@@ -141,7 +112,6 @@ export const createPlateUI = (
         [MARK_SUBSCRIPT]: withProps(PlateLeaf, {as: 'sub'}),
         [MARK_SUPERSCRIPT]: withProps(PlateLeaf, {as: 'sup'}),
         [MARK_UNDERLINE]: withProps(PlateLeaf, {as: 'u'}),
-        // [KEY_AMAZING]: AmazingComponent,
     };
 
     if (overrideByKey) {

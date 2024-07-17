@@ -18,70 +18,13 @@ import {
     InlineComboboxInput,
     InlineComboboxItem,
 } from './inline-combobox';
-import {KEY_AMAZING} from "@/components/edtiro_compnents/amazing_com";
+import {slateSlashRules} from "@/components/pages/editor";
 
-interface SlashCommandRule {
-    icon: ComponentType<SVGProps<SVGSVGElement>>;
-    onSelect: (editor: PlateEditor) => void;
-    value: string;
-    keywords?: string[];
-}
-
-export let slateSlashRules: SlashCommandRule[] = [
-    {
-        icon: Icons.h1,
-        onSelect: (editor) => {
-            toggleNodeType(editor, {activeType: ELEMENT_H1});
-        },
-        value: 'Heading 1',
-    },
-    {
-        icon: Icons.h2,
-        onSelect: (editor) => {
-            toggleNodeType(editor, {activeType: ELEMENT_H2});
-        },
-        value: 'Heading 2',
-    },
-    {
-        icon: Icons.h3,
-        onSelect: (editor) => {
-            toggleNodeType(editor, {activeType: ELEMENT_H3});
-        },
-        value: 'Heading 3',
-    },
-    {
-        icon: Icons.ul,
-        keywords: ['ul', 'unordered list'],
-        onSelect: (editor) => {
-            toggleIndentList(editor, {
-                listStyleType: ListStyleType.Disc,
-            });
-        },
-        value: 'Bulleted list',
-    },
-    {
-        icon: Icons.ol,
-        keywords: ['ol', 'ordered list'],
-        onSelect: (editor) => {
-            toggleIndentList(editor, {
-                listStyleType: ListStyleType.Decimal,
-            });
-        },
-        value: 'Numbered list',
-    },
-
-    {
-        icon: Icons.viewing,
-        onSelect: (editor) => {
-            toggleNodeType(editor, {activeType: KEY_AMAZING});
-        },
-        value: 'amazing',
-    },
-];
 
 export const SlashInputElement = withRef<typeof PlateElement>(
     ({className, ...props}, ref) => {
         const {children, editor, element} = props;
+        // console.log({slateSlashRules})
         return (
             <PlateElement
                 as="span"
@@ -97,7 +40,12 @@ export const SlashInputElement = withRef<typeof PlateElement>(
                             No matching commands found
                         </InlineComboboxEmpty>
 
-                        {slateSlashRules.map(({icon: Icon, keywords, onSelect, value}) => (
+                        {slateSlashRules.length > 0 && slateSlashRules.map(({
+                                                                                icon: Icon,
+                                                                                keywords,
+                                                                                onSelect,
+                                                                                value
+                                                                            }) => (
                             <InlineComboboxItem
                                 key={value}
                                 keywords={keywords}

@@ -1,6 +1,6 @@
 'use client';
 
-import React, {useMemo, useRef} from 'react';
+import React, {ComponentType, SVGProps, useMemo, useRef} from 'react';
 import {DndProvider} from 'react-dnd';
 import {HTML5Backend} from 'react-dnd-html5-backend';
 
@@ -23,7 +23,7 @@ import {createExitBreakPlugin, createSingleLinePlugin, createSoftBreakPlugin,} f
 import {createCaptionPlugin} from '@udecode/plate-caption';
 import {createCodeBlockPlugin, ELEMENT_CODE_BLOCK,} from '@udecode/plate-code-block';
 import {createCommentsPlugin} from '@udecode/plate-comments';
-import {createPlugins, Plate, type PlatePluginComponent, useEditorRef,} from '@udecode/plate-common';
+import {createPlugins, insertNode, Plate, PlateEditor, type PlatePluginComponent,} from '@udecode/plate-common';
 import {createDndPlugin} from '@udecode/plate-dnd';
 import {createEmojiPlugin} from '@udecode/plate-emoji';
 import {createExcalidrawPlugin} from '@udecode/plate-excalidraw';
@@ -40,7 +40,7 @@ import {
 import {createHighlightPlugin} from '@udecode/plate-highlight';
 import {createHorizontalRulePlugin} from '@udecode/plate-horizontal-rule';
 import {createIndentPlugin} from '@udecode/plate-indent';
-import {createIndentListPlugin} from '@udecode/plate-indent-list';
+import {createIndentListPlugin, ListStyleType, toggleIndentList} from '@udecode/plate-indent-list';
 import {createJuicePlugin} from '@udecode/plate-juice';
 import {createKbdPlugin} from '@udecode/plate-kbd';
 import {createColumnPlugin} from '@udecode/plate-layout';
@@ -94,7 +94,8 @@ import {FireLiComponent, FireMarker,} from '@/registry/default/plate-ui/indent-f
 import {TodoLi, TodoMarker,} from '@/registry/default/plate-ui/indent-todo-marker-component';
 import {Prism} from "@/registry/default/plate-ui/code-block-combobox";
 import {withDraggables} from "@/registry/default/plate-ui/with-draggables";
-import createAmazingPlugin from "@/components/edtiro_compnents/amazing_com";
+import {Icons} from "@/components/icons";
+import {MyMentionItem} from "@/lib/plate/demo/values/mentionables";
 
 export const usePlaygroundPlugins = ({
                                          components = createPlateUI(),
@@ -152,7 +153,6 @@ export const usePlaygroundPlugins = ({
                         },
                     }),
                     createSlashPlugin(),
-                    createAmazingPlugin(),
                     createTablePlugin({
                         enabled: !!enabled.table,
                         options: {
@@ -321,23 +321,123 @@ export const usePlaygroundPlugins = ({
 
 // reset editor when initialValue changes
 
+interface SlashCommandRule {
+    icon: ComponentType<SVGProps<SVGSVGElement>>;
+    onSelect: (editor: PlateEditor) => void;
+    value: string;
+    keywords?: string[];
+}
 
-export function OdocEditor(props: { id?: ValueId, initialValue: any }) {
+
+export let slateSlashRules: SlashCommandRule[] = [
+    {
+        icon: Icons.h1,
+        value: 'Heading 1',
+        onSelect: (editor) => {
+            insertNode(editor, {
+                type: 'h1',
+                children: [{text: ""}]
+            });
+        },
+    },
+    {
+        icon: Icons.h2,
+        value: 'Heading 2',
+        onSelect: (editor) => {
+            insertNode(editor, {
+                type: 'h2',
+                children: [{text: ""}]
+            });
+        },
+    },
+    {
+        icon: Icons.h3,
+        value: 'Heading 3',
+        onSelect: (editor) => {
+            insertNode(editor, {
+                type: 'h3',
+                children: [{text: ""}]
+            });
+        },
+    },
+    {
+        icon: Icons.ul,
+        keywords: ['ul', 'unordered list'],
+        onSelect: (editor) => {
+            toggleIndentList(editor, {
+                listStyleType: ListStyleType.Disc,
+            });
+        },
+        value: 'Bulleted list',
+    },
+    {
+        icon: Icons.ol,
+        keywords: ['ol', 'ordered list'],
+        onSelect: (editor) => {
+            toggleIndentList(editor, {
+                listStyleType: ListStyleType.Decimal,
+            });
+        },
+        value: 'Numbered list',
+    },
+];
+
+export const MENTIONABLES: MyMentionItem[] = [
+    {key: 'test', text: 'test'},
+];
+
+interface OdocEditorProps {
+    id: string;
+    initialValue: any;
+    onChange: (value: any) => void;
+    extraPlugins: any[];
+    userMentions: MyMentionItem[];
+    onInsertComponent: (component: any) => void;
+
+}
+
+export function OdocEditor(props: OdocEditorProps) {
     const containerRef = useRef(null);
     const enabled = settingsStore.use.checkedComponents();
-    const {id, initialValue, onChange} = props;
+    const {id, initialValue, onChange, extraPlugins, userMentions, onInsertComponent} = props;
 
     const plugins = usePlaygroundPlugins({
         components: withDraggables(createPlateUI()),
         id,
     });
-    let onEditorChange = (changes: any) => {
-        console.log(changes.operation)
-    };
-    let onInserComponent = (component: any) => {
-        console.log("insert com", component)
-    };
+    userMentions.map(item => {
+            if (!MENTIONABLES.find(mention => mention.key === item.key)) {
+                MENTIONABLES.push({
+                    key: item.key,
+                    text: item.text
+                })
+            }
+        }
+    );
 
+
+    extraPlugins.map((item, index) => {
+
+            if (!slateSlashRules.find(rule => rule.value === item.key)) {
+                slateSlashRules.push({
+                    icon: item.icon,
+                    onSelect: (editor) => {
+                        insertNode(editor, {type: item.key, children: [{text: ""}]});
+                        onInsertComponent(item);
+                    },
+                    value: item.key
+                })
+            }
+        }
+    );
+
+    let instantiatedExtraPlugins = extraPlugins.map(item => item.plugin());
+
+    const combinedPlugins = [...plugins, ...instantiatedExtraPlugins];
+
+    // function handleKeyDown(e, k) {
+    //     console.log({e, k})
+    // }
 
     return (
         <DndProvider backend={HTML5Backend}>
@@ -347,7 +447,7 @@ export function OdocEditor(props: { id?: ValueId, initialValue: any }) {
                     initialValue={initialValue}
                     key={id}
                     normalizeInitialValue
-                    plugins={plugins}
+                    plugins={combinedPlugins}
                     onChange={onChange}
                 >
                     <CommentsProvider>
