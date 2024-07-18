@@ -1,4 +1,5 @@
-import {ComboboxItemProps} from "@udecode/plate-combobox";
+"use client";
+// import {ComboboxItemProps} from "@udecode/plate-combobox";
 import {
     // EmojiItemData,
     KEY_EMOJI,
@@ -8,7 +9,7 @@ import {
 
 import {Combobox} from "./combobox";
 
-export function EmojiComboboxItem({item}: ComboboxItemProps) {
+export function EmojiComboboxItem({item}: any) {
     const {
         data: {id, emoji},
     } = item;

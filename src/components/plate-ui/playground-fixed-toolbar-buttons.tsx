@@ -1,4 +1,3 @@
-import React from 'react';
 
 import type { ValueId } from '@/config/customizer-plugins';
 
@@ -39,6 +38,7 @@ import { PlaygroundInsertDropdownMenu } from '../../../../plate/apps/www/src/com
 import { PlaygroundModeDropdownMenu } from '../../../../plate/apps/www/src/components/plate-ui/playground-mode-dropdown-menu';
 import { PlaygroundMoreDropdownMenu } from '../../../../plate/apps/www/src/components/plate-ui/playground-more-dropdown-menu';
 import { PlaygroundTurnIntoDropdownMenu } from '../../../../plate/apps/www/src/components/plate-ui/playground-turn-into-dropdown-menu';
+import {AlignDropdownMenu} from "../../registry/default/plate-ui/align-dropdown-menu";
 
 export function PlaygroundFixedToolbarButtons({ id }: { id?: ValueId }) {
   const readOnly = useEditorReadOnly();

@@ -1,6 +1,8 @@
 {
+  "private": false,
+  "types": "dist/index.d.ts",
   "name": "client",
-  "version": "0.0.0",
+  "version": "3.0.0",
   "type": "module",
   "scripts": {
     "start": "vite --port 8000",

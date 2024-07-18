@@ -11,6 +11,7 @@ import { CommentAvatar } from "./comment-avatar";
 import { CommentMoreDropdown } from "./comment-more-dropdown";
 import { CommentResolveButton } from "./comment-resolve-button";
 import { CommentValue } from "./comment-value";
+import React from "react";
 
 type PlateCommentProps = {
   commentId: string;
