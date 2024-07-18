@@ -4,7 +4,6 @@ import React, {ComponentType, SVGProps, useMemo, useRef} from 'react';
 import {DndProvider} from 'react-dnd';
 import {HTML5Backend} from 'react-dnd-html5-backend';
 
-import type {ValueId} from '@/config/customizer-plugins';
 
 import {cn} from '@udecode/cn';
 import {createAlignPlugin} from '@udecode/plate-alignment';
@@ -23,7 +22,7 @@ import {createExitBreakPlugin, createSingleLinePlugin, createSoftBreakPlugin,} f
 import {createCaptionPlugin} from '@udecode/plate-caption';
 import {createCodeBlockPlugin, ELEMENT_CODE_BLOCK,} from '@udecode/plate-code-block';
 import {createCommentsPlugin} from '@udecode/plate-comments';
-import {createPlugins, insertNode, Plate, PlateEditor, type PlatePluginComponent,} from '@udecode/plate-common';
+import {createPlugins, insertNode, Plate, PlateEditor, PlatePluginComponent} from '@udecode/plate-common';
 import {createDndPlugin} from '@udecode/plate-dnd';
 import {createEmojiPlugin} from '@udecode/plate-emoji';
 import {createExcalidrawPlugin} from '@udecode/plate-excalidraw';
@@ -96,14 +95,15 @@ import {Prism} from "@/registry/default/plate-ui/code-block-combobox";
 import {withDraggables} from "@/registry/default/plate-ui/with-draggables";
 import {Icons} from "@/components/icons";
 import {MyMentionItem} from "@/lib/plate/demo/values/mentionables";
+import {ValueId} from "../../config/customizer-plugins";
+// import {captionPlugin} from "../../lib/plate/demo/plugins/captionPlugin";
 
-export const usePlaygroundPlugins = ({
-                                         components = createPlateUI(),
-                                         id,
-                                     }: {
+
+export const usePlaygroundPlugins = (inputs: {
     components?: Record<string, PlatePluginComponent>;
     id?: ValueId;
-} = {}) => {
+}) => {
+    const {components, id} = inputs;
     const enabled = settingsStore.use.checkedPlugins();
 
     const autoformatOptions = {
