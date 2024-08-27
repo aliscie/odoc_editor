@@ -1,4 +1,5 @@
 import {createPluginFactory} from "@udecode/plate-common";
+import {withDraggables, withDraggable as withDraggableFunc} from "@/registry/default/plate-ui/with-draggables";
 
 const KEY_AMAZING = 'amazing';
 
@@ -15,7 +16,7 @@ function AmazingComponent(p: Props) {
 const createAmazingPlugin = createPluginFactory({
     key: KEY_AMAZING,
     isElement: true,
-    component: AmazingComponent,
+    component: withDraggableFunc(AmazingComponent as React.FC),
 });
 export {KEY_AMAZING, AmazingComponent};
 export default createAmazingPlugin;

@@ -16,7 +16,7 @@ export const usersData = {
 
 export const commentsData: Record<string, TComment> = {
   1: {
-    createdAt: 1_663_453_625_129,
+    createdAt: 0,
     id: '1',
     userId: '1',
     value: [{ children: [{ text: 'This is a comment.' }], type: 'p' }],

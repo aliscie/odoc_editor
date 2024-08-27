@@ -83,20 +83,17 @@ import {selectOnBackspacePlugin} from '@/lib/plate/demo/plugins/selectOnBackspac
 import {softBreakPlugin} from '@/lib/plate/demo/plugins/softBreakPlugin';
 import {tabbablePlugin} from '@/lib/plate/demo/plugins/tabbablePlugin';
 import {trailingBlockPlugin} from '@/lib/plate/demo/plugins/trailingBlockPlugin';
-// import { Prism } from '@/components/plate-ui/code-block-combobox';
 import {CommentsPopover} from '@/components/plate-ui/comments-popover';
 import {CursorOverlay} from '@/registry/default/plate-ui/cursor-overlay';
 import {Editor} from '@/components/plate-ui/editor';
 import {FloatingToolbar} from '@/components/plate-ui/floating-toolbar';
-// import {ImagePreview} from '@/registry/default/plate-ui/image-preview';
 import {FireLiComponent, FireMarker,} from '@/registry/default/plate-ui/indent-fire-marker-component';
 import {TodoLi, TodoMarker,} from '@/registry/default/plate-ui/indent-todo-marker-component';
 import {Prism} from "@/registry/default/plate-ui/code-block-combobox";
-import {withDraggables} from "@/registry/default/plate-ui/with-draggables";
 import {Icons} from "@/components/icons";
-import {MyMentionItem} from "@/lib/plate/demo/values/mentionables";
+import {MyMentionItem, THE_MENTIONABLES} from "@/lib/plate/demo/values/THE_MENTIONABLES";
 import {ValueId} from "../../config/customizer-plugins";
-// import {captionPlugin} from "../../lib/plate/demo/plugins/captionPlugin";
+import {withDraggables, withDraggable as withDraggableFunc} from "@/registry/default/plate-ui/with-draggables";
 
 
 export const usePlaygroundPlugins = (inputs: {
@@ -382,9 +379,7 @@ export let slateSlashRules: SlashCommandRule[] = [
     },
 ];
 
-export const MENTIONABLES: MyMentionItem[] = [
-    {key: 'test', text: 'test'},
-];
+export const MENTIONABLES: MyMentionItem[] = [];
 
 interface OdocEditorProps {
     id: string;
@@ -392,7 +387,8 @@ interface OdocEditorProps {
     onChange: (value: any) => void;
     extraPlugins: any[];
     userMentions: MyMentionItem[];
-    onInsertComponent: (component: any) => void;
+    onInsertComponent: (component: any, id: string) => void;
+    readOnly?: boolean;
 
 }
 
@@ -406,17 +402,14 @@ export function OdocEditor(props: OdocEditorProps) {
         id,
     });
 
-    if (Array.isArray(userMentions)) {
-        userMentions.map(item => {
-            if (!MENTIONABLES.find(mention => mention.key === item.key)) {
-                MENTIONABLES.push({
-                    key: item.key,
-                    text: item.text
-                });
-            }
-        });
-    }
-    
+    userMentions.map(item => {
+        if (!THE_MENTIONABLES.find(mention => mention.key === item.key)) {
+            THE_MENTIONABLES.push({
+                key: item.key,
+                text: item.text
+            });
+        }
+    });
 
 
     if (Array.isArray(extraPlugins)) {
@@ -425,8 +418,9 @@ export function OdocEditor(props: OdocEditorProps) {
                 slateSlashRules.push({
                     icon: item.icon,
                     onSelect: (editor) => {
-                        insertNode(editor, { type: item.key, children: [{ text: "" }] });
-                        onInsertComponent(item);
+                        let node_id = Math.random().toString(36).substring(2, 8);
+                        insertNode(editor, {id: node_id, type: item.key, children: [{text: ""}]});
+                        onInsertComponent(item, node_id);
                     },
                     value: item.key
                 });
@@ -436,14 +430,18 @@ export function OdocEditor(props: OdocEditorProps) {
 
     function initializeExtraPlugins(plugins) {
         if (!plugins) {
-          console.warn("plugins parameter is undefined. Initializing as an empty array.");
-          return [];
+            console.warn("plugins parameter is undefined. Initializing as an empty array.");
+            return [];
         }
-        return plugins.map(item => item.plugin());
-      }
-      
-      let instantiatedExtraPlugins = initializeExtraPlugins(extraPlugins);
-      
+        return plugins.map(item => item.plugin()).map(item => {
+            if (item.component) item.component = withDraggableFunc(item.component);
+            return item
+        });
+
+    }
+
+    let instantiatedExtraPlugins = initializeExtraPlugins(extraPlugins);
+
 
     const combinedPlugins = [...plugins, ...instantiatedExtraPlugins];
 
@@ -489,6 +487,7 @@ export function OdocEditor(props: OdocEditorProps) {
                                 ref={containerRef}
                             >
                                 <Editor
+                                    readOnly={props.readOnly}
                                     {...editableProps}
                                     className={cn(
                                         editableProps.className,
@@ -497,12 +496,11 @@ export function OdocEditor(props: OdocEditorProps) {
                                         id && 'pb-8 pt-2'
                                     )}
                                     focusRing={false}
-                                    placeholder={'place holder test'}
                                     size="md"
                                     variant="ghost"
                                 />
 
-                                {enabled['floating-toolbar'] && (
+                                {!props.readOnly && enabled['floating-toolbar'] && (
                                     <FloatingToolbar>
                                         {enabled['floating-toolbar-buttons'] && (
                                             <PlaygroundFloatingToolbarButtons id={id}/>
@@ -525,4 +523,6 @@ export function OdocEditor(props: OdocEditorProps) {
         </DndProvider>
     );
 }
+
 export default OdocEditor;
+export {MyMentionItem, THE_MENTIONABLES}

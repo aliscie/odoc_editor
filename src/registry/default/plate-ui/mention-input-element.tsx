@@ -4,7 +4,7 @@ import { cn, withRef } from '@udecode/cn';
 import { PlateElement } from '@udecode/plate-common';
 import { getMentionOnSelectItem } from '@udecode/plate-mention';
 
-import { MENTIONABLES } from '@/lib/plate/demo/values/mentionables';
+import { THE_MENTIONABLES } from '@/lib/plate/demo/values/THE_MENTIONABLES';
 
 import {
   InlineCombobox,
@@ -47,7 +47,7 @@ export const MentionInputElement = withRef<typeof PlateElement>(
           <InlineComboboxContent className="my-1.5">
             <InlineComboboxEmpty>No results found</InlineComboboxEmpty>
 
-            {MENTIONABLES.map((item) => (
+            {THE_MENTIONABLES.map((item) => (
               <InlineComboboxItem
                 key={item.key}
                 onClick={() => onSelectItem(editor, item, search)}

@@ -1,6 +1,6 @@
 {
   "name": "odoc_editor_v2",
-  "version": "0.2.38",
+  "version": "0.2.61",
   "main": "dist/cjs/components/pages/editor.js",
   "module": "dist/esm/main.js",
   "types": "dist/esm/components/pages/editor.d.ts",
@@ -9,6 +9,7 @@
     "README.md"
   ],
   "scripts": {
+    "test": "vitest",
     "clean": "rm -rf dist",
     "build": "yarn run clean && rollup -c --bundleConfigAsCjs",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
@@ -125,6 +126,7 @@
     "@storybook/nextjs": "8.2.7",
     "@storybook/react": "8.3.0-alpha.3",
     "@storybook/test": "8.2.7",
+    "@testing-library/jest-dom": "^6.5.0",
     "@types/lodash": "^4",
     "@types/node": "22.1.0",
     "@types/prismjs": "^1",
@@ -148,7 +150,8 @@
     "storybook": "8.2.7",
     "tailwindcss": "3.4.7",
     "typescript": "^5.5.3",
-    "vite": "5.3.5"
+    "vite": "5.3.5",
+    "vitest": "^2.0.5"
   },
   "eslintConfig": {
     "extends": [
