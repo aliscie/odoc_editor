@@ -102,7 +102,6 @@
     "react-dnd-html5-backend": "15",
     "react-dom": "^18.3.1",
     "react-lite-youtube-embed": "^2.4.0",
-    "react-tweet": "3.2.1",
     "remark": "^15.0.1",
     "shiki": "1.12.1",
     "slate": "^0.103.0",
